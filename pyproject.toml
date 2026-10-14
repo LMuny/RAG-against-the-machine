@@ -1,0 +1,17 @@
+[project]
+name = "m6-rag-againstthemachine"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "LMuny", email = "ludovic.muny@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[project.scripts]
+m6-rag-againstthemachine = "m6_rag_againstthemachine:main"
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"
