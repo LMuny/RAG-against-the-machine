@@ -1,2 +1,8 @@
 *.pdf
 RAG_study_guide.md
+vllm-0.10.1
+datasets_public
+moulinette
+.mypy_cache
+.venv
+__pycache__
