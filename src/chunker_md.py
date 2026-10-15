@@ -26,7 +26,11 @@ def find_sections(text: str) -> list[tuple[int, int]]:
             starts.append(pos)
         pos += len(line)
     ends = starts[1:] + [len(text)]
-    return [(s, e) for s, e in zip(starts, ends) if s < e]
+    sections: list[tuple[int, int]] = []
+    for section_start, section_end in zip(starts, ends):
+        if section_start < section_end:
+            sections.append((section_start, section_end))
+    return sections
 
 
 def find_cuts(text: str, start: int, end: int, sep: str) -> list[int]:
@@ -54,3 +58,27 @@ def split_section(text: str, start: int, end: int,
     if chunk_start < end:
         chunks.append((chunk_start, end))
     return chunks
+
+
+def split_text(text: str, start: int, end: int,
+               max_size: int) -> list[tuple[int, int]]:
+    """Split text[start:end] into spans of at most max_size characters.
+
+    Cut on blank lines first, then on line breaks, then every max_size
+    characters as a last resort.
+    """
+    result: list[tuple[int, int]] = []
+    for para_start, para_end in split_section(text, start, end,
+                                              max_size, "\n\n"):
+        if para_end - para_start <= max_size:
+            result.append((para_start, para_end))
+            continue
+        for line_start, line_end in split_section(text, para_start, para_end,
+                                                  max_size, "\n"):
+            if line_end - line_start <= max_size:
+                result.append((line_start, line_end))
+                continue
+            for piece_start in range(line_start, line_end, max_size):
+                piece_end = min(piece_start + max_size, line_end)
+                result.append((piece_start, piece_end))
+    return result

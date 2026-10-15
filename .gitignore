@@ -6,3 +6,6 @@ moulinette
 .mypy_cache
 .venv
 __pycache__
+.vscode
+HANDOFF.md
+data/
