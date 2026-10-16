@@ -1,7 +1,7 @@
 USER_NAME := $(shell whoami)
 
-# export UV_CACHE_DIR				:= /goinfre/$(USER_NAME)/.cache/uv
-# export UV_PROJECT_ENVIRONMENT	:= /goinfre/$(USER_NAME)/venvs/RAG
+export UV_CACHE_DIR				:= /goinfre/$(USER_NAME)/.cache/uv
+export UV_PROJECT_ENVIRONMENT	:= /goinfre/$(USER_NAME)/venvs/RAG
 
 all: run
 
