@@ -1,12 +1,14 @@
 """Split Markdown files into chunks along their sections."""
 
+from src.models import MinimalSource
+
 
 def read_file(path: str) -> str:
     """Return the content of a text file decoded as UTF-8."""
     try:
         with open(path, 'r', encoding="utf-8") as f:
             return f.read()
-    except Exception as e:
+    except OSError as e:
         raise OSError(f"{e}, {path} can't be reached")
 
 
@@ -82,3 +84,17 @@ def split_text(text: str, start: int, end: int,
                 piece_end = min(piece_start + max_size, line_end)
                 result.append((piece_start, piece_end))
     return result
+
+
+def chunk_markdown(path: str, max_size: int
+                   ) -> list[tuple[MinimalSource, str]]:
+    text = read_file(path)
+    chunks: list[tuple[MinimalSource, str]] = []
+    for section_start, section_end in find_sections(text):
+        for chunk_start, chunk_end in split_text(text, section_start,
+                                                 section_end, max_size):
+            source = MinimalSource(file_path=path,
+                                   first_character_index=chunk_start,
+                                   last_character_index=chunk_end)
+            chunks.append((source, text[chunk_start:chunk_end]))
+    return chunks

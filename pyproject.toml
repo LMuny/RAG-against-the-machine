@@ -9,7 +9,10 @@ authors = [
 requires-python = ">=3.10, <3.13"
 dependencies = [
     'vllm==0.10.1',
-    'pydantic'
+    'pydantic',
+    "bm25s>=0.3.13",
+    "fire>=0.7.1",
+    "tqdm>=4.70.1",
 ]
 
 [project.scripts]
@@ -28,3 +31,6 @@ dev = [
     "flake8>=7.4.1",
     "mypy>=2.4.0",
 ]
+
+[tool.mypy]
+exclude = ["^\\.venv/", "^data/", "^moulinette/"]

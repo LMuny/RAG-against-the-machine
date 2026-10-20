@@ -15,10 +15,16 @@ debug:
 	uv run -m pdb -m src
 
 clean:
-	rm -rf -R src/__pycache__ .mypy_cache
+	find . -path ./.venv -prune -o -type d -name __pycache__ -exec rm -rf {} +
+	rm -rf .mypy_cache
 
 lint:
-	uv run mypy -m src && uv run flake8 src
+	uv run flake8 .
+	uv run mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+
+lint-strict:
+	uv run flake8 .
+	uv run mypy . --strict
 
 
-.PHONY: all run install debug clean lint
+.PHONY: all run install debug clean lint lint-strict
