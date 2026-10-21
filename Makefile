@@ -1,7 +1,9 @@
 USER_NAME := $(shell whoami)
 
+ifneq ($(wildcard /goinfre),)
 export UV_CACHE_DIR				:= /goinfre/$(USER_NAME)/.cache/uv
 export UV_PROJECT_ENVIRONMENT	:= /goinfre/$(USER_NAME)/venvs/RAG
+endif
 
 all: run
 

@@ -34,3 +34,4 @@ dev = [
 
 [tool.mypy]
 exclude = ["^\\.venv/", "^data/", "^moulinette/"]
+ignore_missing_imports = true
