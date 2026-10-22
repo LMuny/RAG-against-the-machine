@@ -98,3 +98,15 @@ def chunk_markdown(path: str, max_size: int
                                    last_character_index=chunk_end)
             chunks.append((source, text[chunk_start:chunk_end]))
     return chunks
+
+
+def chunk_text(path: str, max_size: int
+               ) -> list[tuple[MinimalSource, str]]:
+    text = read_file(path)
+    chunks: list[tuple[MinimalSource, str]] = []
+    for chunk_start, chunk_end in split_text(text, 0, len(text), max_size):
+        source = MinimalSource(file_path=path,
+                               first_character_index=chunk_start,
+                               last_character_index=chunk_end)
+        chunks.append((source, text[chunk_start:chunk_end]))
+    return chunks
