@@ -4,6 +4,7 @@ import os
 import bm25s
 from tqdm import tqdm
 from src.chunker_md import chunk_markdown
+from src.chunker_py import chunk_python
 from src.models import MinimalSource
 
 EXTENSIONS: tuple[str, ...] = (".md", ".txt", ".py")
@@ -24,7 +25,7 @@ def find_files(
 def build_index(raw_dir: str, save_dir: str, max_chunk_size: int) -> None:
     texts: list[str] = []
     sources: list[MinimalSource] = []
-    for path in tqdm(find_files(raw_dir, (".md", ".txt")), desc="Chunking"):
+    for path in tqdm(find_files(raw_dir, EXTENSIONS), desc="Chunking"):
         try:
             chunks = chunk_markdown(path, max_chunk_size)
         except (OSError, UnicodeDecodeError) as error:
