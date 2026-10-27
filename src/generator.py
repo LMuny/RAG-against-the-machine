@@ -17,10 +17,16 @@ class Generator:
 
     def __init__(self, model_name: str = "Qwen/Qwen3-0.6B",
                  max_model_len: int = 8192,
-                 max_tokens: int = 512) -> None:
-        """Load the model (vllm is imported here, it is slow to import)."""
+                 max_tokens: int = 512,
+                 max_num_seqs: int = 64) -> None:
+        """Load the model (vllm is imported here, it is slow to import).
+
+        max_num_seqs caps the batch vLLM warms up with: its default (256)
+        runs out of memory on a 6 GB GPU.
+        """
         from vllm import LLM, SamplingParams
-        self.llm = LLM(model=model_name, max_model_len=max_model_len)
+        self.llm = LLM(model=model_name, max_model_len=max_model_len,
+                       max_num_seqs=max_num_seqs)
         self.tokenizer = self.llm.get_tokenizer()
         self.max_model_len = max_model_len
         self.max_tokens = max_tokens

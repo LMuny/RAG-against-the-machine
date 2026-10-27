@@ -148,7 +148,10 @@ class RagCLI():
         """
         if not _is_positive_int(max_chunk_size, "max_chunk_size"):
             return
-        build_index(source_path, processed_path, max_chunk_size)
+        try:
+            build_index(source_path, processed_path, max_chunk_size)
+        except OSError as e:
+            _print_error(str(e))
 
     def search(
             self,

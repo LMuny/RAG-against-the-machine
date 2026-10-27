@@ -88,6 +88,17 @@ def split_text(text: str, start: int, end: int,
 
 def chunk_markdown(path: str, max_size: int
                    ) -> list[tuple[MinimalSource, str]]:
+    """Split a Markdown file into chunks of at most max_size characters.
+
+    The file is cut at headings first, then each section by split_text.
+
+    Args:
+        path: Path of the Markdown file.
+        max_size: Maximum length of a chunk, in characters.
+
+    Returns:
+        Each chunk's source location with its text.
+    """
     text = read_file(path)
     chunks: list[tuple[MinimalSource, str]] = []
     for section_start, section_end in find_sections(text):
@@ -102,6 +113,15 @@ def chunk_markdown(path: str, max_size: int
 
 def chunk_text(path: str, max_size: int
                ) -> list[tuple[MinimalSource, str]]:
+    """Split a plain text file into chunks of at most max_size characters.
+
+    Args:
+        path: Path of the text file.
+        max_size: Maximum length of a chunk, in characters.
+
+    Returns:
+        Each chunk's source location with its text.
+    """
     text = read_file(path)
     chunks: list[tuple[MinimalSource, str]] = []
     for chunk_start, chunk_end in split_text(text, 0, len(text), max_size):

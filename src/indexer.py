@@ -14,6 +14,12 @@ def find_files(
         raw_dir: str,
         extension: str | tuple[str, ...] = EXTENSIONS
 ) -> list[str]:
+    """Return the sorted paths of the files under raw_dir with an extension.
+
+    Args:
+        raw_dir: Directory to walk recursively.
+        extension: Extension, or tuple of extensions, to keep.
+    """
     file_list: list[str] = []
     for dirpath, _dirnames, filenames in os.walk(raw_dir):
         for file in filenames:
@@ -23,6 +29,10 @@ def find_files(
 
 
 def chunk_file(path: str, max_size: int) -> list[tuple[MinimalSource, str]]:
+    """Chunk a file with the strategy matching its extension.
+
+    Returns an empty list for an unsupported extension.
+    """
     if path.endswith(".md"):
         return chunk_markdown(path, max_size)
     if path.endswith(".txt"):
@@ -33,9 +43,26 @@ def chunk_file(path: str, max_size: int) -> list[tuple[MinimalSource, str]]:
 
 
 def build_index(raw_dir: str, save_dir: str, max_chunk_size: int) -> None:
+    """Chunk every file of raw_dir and save a BM25 index in save_dir.
+
+    Each chunk is indexed with its file path, made readable, in front of its
+    text. Only the source locations are saved, not the texts.
+
+    Args:
+        raw_dir: Directory holding the corpus.
+        save_dir: Directory where the index is saved.
+        max_chunk_size: Maximum length of a chunk, in characters.
+
+    Raises:
+        OSError: If raw_dir holds no file to index, or save_dir can't be
+            written.
+    """
     texts: list[str] = []
     sources: list[MinimalSource] = []
-    for path in tqdm(find_files(raw_dir, EXTENSIONS), desc="Chunking"):
+    files = find_files(raw_dir, EXTENSIONS)
+    if not files:
+        raise OSError(f"No .py, .md or .txt file found in {raw_dir}")
+    for path in tqdm(files, desc="Chunking"):
         try:
             chunks = chunk_file(path, max_chunk_size)
         except (OSError, UnicodeDecodeError) as error:
