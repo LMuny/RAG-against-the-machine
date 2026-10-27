@@ -9,4 +9,10 @@ __pycache__
 .vscode
 HANDOFF.md
 ROADMAP.md
-processed
+
+# Keep the data/ folder layout, but none of its files
+data/**
+!data/**/
+!data/**/.gitkeep
+# don't descend into the corpus: its own .gitignore re-includes files
+data/raw/*/
