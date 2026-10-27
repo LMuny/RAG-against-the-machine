@@ -13,6 +13,7 @@ dependencies = [
     "bm25s>=0.3.13",
     "fire>=0.7.1",
     "tqdm>=4.70.1",
+    "transformers>=4.55,<5",
 ]
 
 [project.scripts]
